@@ -1,5 +1,5 @@
-"""Log Analysis Project for Full Stack Nanodegree by Udacity"""
-#!/usr/bin/python
+# Log Analysis Project for Full Stack Nanodegree by Udacity
+# !/usr/bin/python
 import psycopg2
 import sys
 
@@ -7,7 +7,7 @@ import sys
 def three_most_popular_articles():
     """Queries and displays the top three most viewed articles."""
     DBNAME = "news"
-    
+
     connection = psycopg2.connect(database=DBNAME)
 
     cursor = connection.cursor()
@@ -41,7 +41,7 @@ def three_most_popular_articles():
 def most_popular_authors():
     """Queries and displays the Authors with the most views."""
     DBNAME = "news"
-    
+
     connection = psycopg2.connect(database=DBNAME)
 
     cursor = connection.cursor()
@@ -51,7 +51,7 @@ def most_popular_authors():
                    count(*) as author_views
             FROM   log
                    JOIN articles ON (log.path = '/article/' || articles.slug)
-                   JOIN authors ON articles.author = authors.id 
+                   JOIN authors ON articles.author = authors.id
             GROUP BY authors.name
             ORDER BY author_views DESC;
             """
@@ -59,7 +59,6 @@ def most_popular_authors():
     cursor.execute(query)
 
     results = cursor.fetchall()
-
 
     print()
     print('Three most popular authors')
@@ -72,17 +71,18 @@ def most_popular_authors():
 
     return
 
+
 def days_with_high_errors():
     """Queries and displays the days when errors were above 1%."""
     DBNAME = "news"
-    
+
     connection = psycopg2.connect(database=DBNAME)
 
     cursor = connection.cursor()
 
     query = """
-              WITH total_requests AS (                                                              
-                SELECT time::date AS day, count(*)
+              WITH total_requests AS (
+              SELECT time::date AS day, count(*)
                 FROM log
                 GROUP BY time::date
                 ORDER BY time::date
@@ -94,7 +94,8 @@ def days_with_high_errors():
                 ORDER BY time::date
               ), error_rate AS (
                 SELECT total_requests.day,
-                  number_of_errors.count::float / total_requests.count::float * 100
+                  number_of_errors.count::float /
+                  total_requests.count::float * 100
                   AS error_percent
                 FROM total_requests, number_of_errors
                 WHERE total_requests.day = number_of_errors.day
